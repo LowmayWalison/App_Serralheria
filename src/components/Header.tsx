@@ -7,7 +7,6 @@ import {
   Settings, 
   Layers, 
   Calculator,
-  Download,
   Sun,
   Moon,
   Cloud
@@ -41,7 +40,6 @@ export function Header({
   onOpenHistory,
   onSaveQuote,
   onOpenBarCalc,
-  onOpenInstall,
   onOpenWorkspace,
   currentUser,
   theme = 'light',
@@ -214,22 +212,6 @@ export function Header({
               {currentUser && (
                 <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
               )}
-            </button>
-          )}
-
-          {/* Download App Button (Prominent & neatly aligned) */}
-          {onOpenInstall && (
-            <button
-              id="btn-header-install-app"
-              onClick={() => {
-                hapticAudio.playTap();
-                onOpenInstall();
-              }}
-              title="Baixar aplicativo no celular (PWA)"
-              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-gradient-to-r from-red-600 via-red-600 to-red-700 hover:from-red-500 hover:to-red-600 active:scale-95 text-white rounded-xl shadow-md shadow-red-950/40 border border-red-500/40 transition-all cursor-pointer whitespace-nowrap ml-auto sm:ml-0"
-            >
-              <Download className="w-3.5 h-3.5 text-white shrink-0" />
-              <span>Baixar App</span>
             </button>
           )}
         </div>

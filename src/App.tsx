@@ -29,10 +29,7 @@ import {
   Plus,
   ArrowRight,
   Trash2,
-  Copy,
-  Download,
-  Smartphone,
-  X
+  Copy
 } from 'lucide-react';
 
 const STORAGE_KEY_CURRENT = 'serralheria_current_quote_v1';
@@ -361,55 +358,6 @@ export default function App() {
       )}
 
       <div className="max-w-5xl mx-auto p-3 sm:p-5 md:p-8">
-        {/* PWA Mobile Installation Prompt Banner */}
-        {!isStandaloneApp && !isBannerDismissed && (
-          <div className="mb-4 bg-white dark:bg-zinc-900 border border-zinc-200/90 dark:border-zinc-800 rounded-2xl p-3.5 sm:p-4 text-zinc-900 dark:text-zinc-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400 shrink-0 shadow-sm">
-                <Smartphone className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <h4 className="text-xs sm:text-sm font-black text-zinc-900 dark:text-zinc-100">
-                    Instalar Aplicativo no Celular
-                  </h4>
-                  <span className="inline-block px-2 py-0.5 bg-red-50 dark:bg-red-950/50 border border-red-200 dark:border-red-900/50 text-red-700 dark:text-red-400 text-[10px] font-bold rounded-full">
-                    100% Offline
-                  </span>
-                </div>
-                <p className="text-[11px] sm:text-xs text-zinc-600 dark:text-zinc-400">
-                  Baixe para ter acesso direto na tela inicial sem precisar abrir o navegador.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2 self-end sm:self-auto shrink-0 w-full sm:w-auto justify-end">
-              <button
-                id="btn-banner-install-app"
-                onClick={() => {
-                  hapticAudio.playSuccess();
-                  setIsInstallOpen(true);
-                }}
-                className="flex-1 sm:flex-none px-4 py-2 bg-gradient-to-r from-red-600 via-red-600 to-red-700 hover:from-red-500 hover:to-red-600 active:scale-95 text-white font-bold text-xs sm:text-sm rounded-xl flex items-center justify-center gap-2 shadow-md shadow-red-950/20 transition-all cursor-pointer whitespace-nowrap"
-              >
-                <Download className="w-4 h-4 text-white shrink-0" />
-                <span>Baixar App</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  setIsBannerDismissed(true);
-                  sessionStorage.setItem('pwa_banner_dismissed', 'true');
-                }}
-                className="p-2 text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-xl transition cursor-pointer"
-                title="Dispensar aviso"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        )}
-
         {/* Header */}
         <Header
           workshopProfile={profile}
@@ -421,7 +369,6 @@ export default function App() {
           onOpenBarCalc={() => setIsBarCalcOpen(true)}
           onOpenPrint={() => setIsPrintOpen(true)}
           onShareWhatsApp={handleShareWhatsApp}
-          onOpenInstall={() => setIsInstallOpen(true)}
           onOpenWorkspace={() => setIsWorkspaceOpen(true)}
           currentUser={currentUser}
           theme={theme}
