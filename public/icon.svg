@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <!-- Background Solid Black -->
+  <rect width="512" height="512" fill="#000000" />
+  
+  <g transform="translate(256, 256)">
+    <!-- Gear Teeth (Outer Cog in Dark Maroon Red) -->
+    <path fill="#771317" d="
+      M -42,-220 L 42,-220 L 36,-175 L -36,-175 Z
+      M 95,-198 L 160,-140 L 132,-105 L 75,-155 Z
+      M 188,-115 L 222,-35 L 180,-25 L 152,-90 Z
+      M 222,35 L 188,115 L 152,90 L 180,25 Z
+      M 160,140 L 95,198 L 75,155 L 132,105 Z
+      M 42,220 L -42,220 L -36,175 L 36,175 Z
+      M -95,198 L -160,140 L -132,105 L -75,155 Z
+      M -188,115 L -222,35 L -180,25 L -152,90 Z
+      M -222,-35 L -188,-115 L -152,-90 L -180,-25 Z
+      M -160,-140 L -95,-198 L -75,-155 L -132,-105 Z
+    " />
+
+    <!-- Gear Body Ring Base -->
+    <circle r="185" fill="#771317" />
+    <circle r="140" fill="#000000" />
+
+    <!-- Sharp Horizontal Wing Accents Left & Right -->
+    <!-- Left Wing -->
+    <path d="M -135,-92 L -250,-92 L -215,-76 L -130,-76 Z" fill="#771317" />
+    <path d="M -135,92 L -250,92 L -215,76 L -130,76 Z" fill="#771317" />
+    <!-- Right Wing -->
+    <path d="M 135,-92 L 250,-92 L 215,-76 L 130,-76 Z" fill="#771317" />
+    <path d="M 135,92 L 250,92 L 215,76 L 130,76 Z" fill="#771317" />
+
+    <!-- Inner Red Ring Border Line -->
+    <circle r="136" fill="none" stroke="#771317" stroke-width="6" />
+
+    <!-- Central 'LW' in Bright Red Italic Serif -->
+    <text 
+      x="2" 
+      y="42" 
+      fill="#D91619" 
+      font-family="'Times New Roman', 'Playfair Display', Georgia, serif" 
+      font-size="168" 
+      font-weight="900" 
+      font-style="italic" 
+      text-anchor="middle"
+      letter-spacing="-6px"
+    >LW</text>
+  </g>
+</svg>
