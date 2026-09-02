@@ -9,8 +9,10 @@ import {
   Calculator,
   Download,
   Sun,
-  Moon
+  Moon,
+  Cloud
 } from 'lucide-react';
+import { User } from 'firebase/auth';
 
 interface HeaderProps {
   workshopProfile: WorkshopProfile;
@@ -23,6 +25,8 @@ interface HeaderProps {
   onOpenPrint: () => void;
   onShareWhatsApp: () => void;
   onOpenInstall?: () => void;
+  onOpenWorkspace?: () => void;
+  currentUser?: User | null;
   theme?: 'light' | 'dark';
   onToggleTheme?: () => void;
   savedCount: number;
@@ -38,6 +42,8 @@ export function Header({
   onSaveQuote,
   onOpenBarCalc,
   onOpenInstall,
+  onOpenWorkspace,
+  currentUser,
   theme = 'light',
   onToggleTheme,
   savedCount,
@@ -188,6 +194,25 @@ export function Header({
                   <Moon className="w-3.5 h-3.5 text-red-400" />
                   <span>Escuro</span>
                 </>
+              )}
+            </button>
+          )}
+
+          {/* Google Workspace & Cloud Hub Button */}
+          {onOpenWorkspace && (
+            <button
+              id="btn-header-workspace"
+              onClick={() => {
+                hapticAudio.playTap();
+                onOpenWorkspace();
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-zinc-800/90 hover:bg-zinc-700 active:bg-zinc-600 text-zinc-200 hover:text-white rounded-xl border border-zinc-700 hover:border-red-500/40 transition cursor-pointer"
+              title="Google Workspace (Sheets, Docs, Drive, Gmail, Agenda) & Nuvem"
+            >
+              <Cloud className="w-3.5 h-3.5 text-blue-400" />
+              <span>Google & Nuvem</span>
+              {currentUser && (
+                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
               )}
             </button>
           )}

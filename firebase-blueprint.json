@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "quote": {
+      "title": "Quote",
+      "description": "Metalworking budget and quote saved by user",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "UID of the user who owns this quote"
+        },
+        "clientName": {
+          "type": "string",
+          "description": "Client full name or company"
+        },
+        "projectName": {
+          "type": "string",
+          "description": "Project title/description"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Client phone contact"
+        },
+        "total": {
+          "type": "number",
+          "description": "Total quote price in BRL"
+        },
+        "profitMargin": {
+          "type": "number",
+          "description": "Profit margin percentage"
+        },
+        "quotePayload": {
+          "type": "string",
+          "description": "JSON stringified complete quote state"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Timestamp ISO string of creation"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp ISO string of last update"
+        }
+      },
+      "required": ["userId", "clientName", "projectName", "total", "quotePayload", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/quotes/{quoteId}": {
+      "schema": "quote",
+      "description": "Stores user quotes and metalworking calculations"
+    }
+  }
+}

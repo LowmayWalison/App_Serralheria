@@ -14,9 +14,12 @@ import { HistoryModal } from './components/HistoryModal';
 import { WorkshopProfileModal } from './components/WorkshopProfileModal';
 import { PrintProposalModal } from './components/PrintProposalModal';
 import { InstallPwaModal } from './components/InstallPwaModal';
+import { WorkspaceHubModal } from './components/WorkspaceHubModal';
 import { ConfirmModal } from './components/ConfirmModal';
 import { MobileBottomNav, MobileTab } from './components/MobileBottomNav';
 import { hapticAudio } from './utils/audioFeedback';
+import { initAuth, testFirestoreConnection } from './services/firebase';
+import { User } from 'firebase/auth';
 import { 
   BookmarkCheck, 
   Layers, 
@@ -145,6 +148,8 @@ export default function App() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isPrintOpen, setIsPrintOpen] = useState(false);
   const [isInstallOpen, setIsInstallOpen] = useState(false);
+  const [isWorkspaceOpen, setIsWorkspaceOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [quoteToDelete, setQuoteToDelete] = useState<{ id: string; name: string } | null>(null);
   const [isConfirmNewQuoteOpen, setIsConfirmNewQuoteOpen] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
@@ -152,6 +157,20 @@ export default function App() {
   const [isBannerDismissed, setIsBannerDismissed] = useState(() => {
     return sessionStorage.getItem('pwa_banner_dismissed') === 'true';
   });
+
+  // Init Firebase Auth & Connection
+  useEffect(() => {
+    testFirestoreConnection();
+    const unsubscribe = initAuth(
+      (user) => {
+        setCurrentUser(user);
+      },
+      () => {
+        setCurrentUser(null);
+      }
+    );
+    return () => unsubscribe();
+  }, []);
 
   // Dark / Light Theme state
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -403,6 +422,8 @@ export default function App() {
           onOpenPrint={() => setIsPrintOpen(true)}
           onShareWhatsApp={handleShareWhatsApp}
           onOpenInstall={() => setIsInstallOpen(true)}
+          onOpenWorkspace={() => setIsWorkspaceOpen(true)}
+          currentUser={currentUser}
           theme={theme}
           onToggleTheme={toggleTheme}
           savedCount={savedQuotes.length}
@@ -605,6 +626,7 @@ export default function App() {
               onCardFeeChange={(cardFeePercent) => handleUpdateQuote({ cardFeePercent })}
               onOpenPrint={() => setIsPrintOpen(true)}
               onShareWhatsApp={handleShareWhatsApp}
+              onOpenWorkspace={() => setIsWorkspaceOpen(true)}
             />
           </div>
         )}
@@ -793,6 +815,36 @@ export default function App() {
         onInstalledSuccess={() => {
           setIsStandaloneApp(true);
           showToast('App instalado com sucesso!');
+        }}
+      />
+
+      <WorkspaceHubModal
+        isOpen={isWorkspaceOpen}
+        onClose={() => setIsWorkspaceOpen(false)}
+        quote={quote}
+        totals={totals}
+        profile={profile}
+        currentUser={currentUser}
+        onUserChange={(user) => {
+          setCurrentUser(user);
+        }}
+        onApplyContact={(name, phone) => {
+          handleUpdateQuote({
+            projectClient: name,
+            clientPhone: phone || quote.clientPhone,
+          });
+          showToast(`Cliente "${name}" preenchido com sucesso!`);
+        }}
+        onLoadCloudQuotes={(quotes) => {
+          if (quotes && quotes.length > 0) {
+            setSavedQuotes((prev) => {
+              const map = new Map<string, QuoteData>();
+              prev.forEach((p) => map.set(p.id, p));
+              quotes.forEach((q) => map.set(q.id, q));
+              return Array.from(map.values());
+            });
+            showToast(`${quotes.length} orçamentos sincronizados da nuvem!`);
+          }
         }}
       />
 

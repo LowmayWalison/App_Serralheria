@@ -14,7 +14,10 @@ import {
   Sliders,
   ShieldCheck,
   Award,
-  MessageCircle
+  MessageCircle,
+  Cloud,
+  FileSpreadsheet,
+  FileText
 } from 'lucide-react';
 
 interface SummarySectionProps {
@@ -26,6 +29,7 @@ interface SummarySectionProps {
   onCardFeeChange: (fee: number) => void;
   onOpenPrint: () => void;
   onShareWhatsApp: () => void;
+  onOpenWorkspace?: () => void;
 }
 
 const PROFIT_PRESETS = [20, 30, 40, 50, 60, 80, 100];
@@ -40,6 +44,7 @@ export function SummarySection({
   onCardFeeChange,
   onOpenPrint,
   onShareWhatsApp,
+  onOpenWorkspace,
 }: SummarySectionProps) {
   const [selectedInstallments, setSelectedInstallments] = useState(3);
   const [copied, setCopied] = useState(false);
@@ -376,6 +381,25 @@ export function SummarySection({
             <span>Proposta Formal / PDF</span>
           </button>
         </div>
+
+        {/* Google Workspace & Cloud Sync Quick Bar */}
+        {onOpenWorkspace && (
+          <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
+              <Cloud className="w-4 h-4 text-blue-500" />
+              <span>Sincronizar com Google Sheets, Docs, Drive, Gmail & Firestore</span>
+            </div>
+            <button
+              id="btn-summary-open-workspace"
+              type="button"
+              onClick={onOpenWorkspace}
+              className="px-3.5 py-1.5 bg-gradient-to-r from-red-600 to-zinc-900 hover:from-red-500 hover:to-zinc-800 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
+            >
+              <FileSpreadsheet className="w-3.5 h-3.5" />
+              <span>Exportar / Sincronizar Google</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

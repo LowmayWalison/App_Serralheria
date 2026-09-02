@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidQuote(data) {
+      return data.userId is string &&
+             data.userId == request.auth.uid &&
+             data.clientName is string && data.clientName.size() <= 200 &&
+             data.projectName is string && data.projectName.size() <= 200 &&
+             data.total is number &&
+             data.quotePayload is string && data.quotePayload.size() <= 500000 &&
+             data.createdAt is string && data.createdAt.size() <= 64;
+    }
+
+    match /quotes/{quoteId} {
+      allow get: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() &&
+                    isValidId(quoteId) &&
+                    isValidQuote(request.resource.data);
+      allow update: if isSignedIn() &&
+                    isValidId(quoteId) &&
+                    resource.data.userId == request.auth.uid &&
+                    isValidQuote(request.resource.data) &&
+                    request.resource.data.userId == resource.data.userId;
+      allow delete: if isSignedIn() &&
+                    isValidId(quoteId) &&
+                    resource.data.userId == request.auth.uid;
+    }
+  }
+}
