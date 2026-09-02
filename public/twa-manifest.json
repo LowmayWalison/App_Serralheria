@@ -1,0 +1,42 @@
+{
+  "packageId": "com.lwserralheria.app",
+  "host": "ais-dev-bzuvd5ygmq24wgfwlycisc-683424798708.us-west2.run.app",
+  "name": "LW Serralheria Pro - Orçamentos & Gestão",
+  "launcherName": "LW Serralheria",
+  "display": "standalone",
+  "themeColor": "#DC2626",
+  "navigationColor": "#09090B",
+  "navigationColorDark": "#09090B",
+  "navigationDividerColor": "#27272A",
+  "navigationDividerColorDark": "#27272A",
+  "backgroundColor": "#09090B",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "/icon.svg",
+  "maskableIconUrl": "/icon.svg",
+  "appVersionCode": 1,
+  "appVersionName": "1.0.0",
+  "shortcuts": [
+    {
+      "name": "Novo Orçamento",
+      "shortName": "Novo",
+      "url": "/?action=new",
+      "icon": "/icon.svg"
+    }
+  ],
+  "splashScreenFadeOutDuration": 300,
+  "enableSiteSettingsShortcut": true,
+  "orientation": "portrait-primary",
+  "generatorApp": "bubblewrap-cli",
+  "features": {
+    "locationDelegation": {
+      "enabled": false
+    },
+    "playBilling": {
+      "enabled": false
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  }
+}

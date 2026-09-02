@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.lwserralheria.app",
+      "sha256_cert_fingerprints": [
+        "14:6D:E9:01:F8:85:7F:0E:16:A8:A1:24:C6:22:3B:AE:63:AE:EC:2F:D0:74:29:9B:65:46:9F:52:1B:61:42:BC"
+      ]
+    }
+  }
+]
