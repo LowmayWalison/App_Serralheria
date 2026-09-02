@@ -734,6 +734,8 @@ export default function App() {
           onOpenPrint={() => setIsPrintOpen(true)}
           onShareWhatsApp={handleShareWhatsApp}
           onSaveQuote={handleSaveToHistory}
+          theme={theme}
+          onToggleTheme={toggleTheme}
         />
       </div>
 

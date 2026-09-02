@@ -6,7 +6,9 @@ import {
   Send, 
   Printer, 
   BookmarkCheck,
-  MessageCircle
+  MessageCircle,
+  Sun,
+  Moon
 } from 'lucide-react';
 import { formatBRL } from '../utils/formatters';
 
@@ -19,6 +21,8 @@ interface MobileBottomNavProps {
   onOpenPrint: () => void;
   onShareWhatsApp: () => void;
   onSaveQuote: () => void;
+  theme?: 'light' | 'dark';
+  onToggleTheme?: () => void;
 }
 
 export function MobileBottomNav({
@@ -28,6 +32,8 @@ export function MobileBottomNav({
   onOpenPrint,
   onShareWhatsApp,
   onSaveQuote,
+  theme = 'dark',
+  onToggleTheme,
 }: MobileBottomNavProps) {
   const handleTabClick = (tab: MobileTab) => {
     hapticAudio.playTap();
@@ -53,10 +59,29 @@ export function MobileBottomNav({
               onSaveQuote();
             }}
             title="Salvar Orçamento"
-            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 active:bg-red-600 text-zinc-300 active:text-white rounded-lg border border-zinc-700 text-xs transition-colors"
+            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 active:bg-red-600 text-zinc-300 active:text-white rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
           >
             <BookmarkCheck className="w-4 h-4 text-red-400" />
           </button>
+
+          {onToggleTheme && (
+            <button
+              id="btn-mobile-nav-theme-toggle"
+              type="button"
+              onClick={() => {
+                hapticAudio.playTap();
+                onToggleTheme();
+              }}
+              title={theme === 'dark' ? 'Mudar para Tema Claro' : 'Mudar para Tema Escuro'}
+              className="p-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
+            >
+              {theme === 'dark' ? (
+                <Sun className="w-4 h-4 text-amber-400" />
+              ) : (
+                <Moon className="w-4 h-4 text-red-400" />
+              )}
+            </button>
+          )}
 
           <button
             onClick={() => {
@@ -64,7 +89,7 @@ export function MobileBottomNav({
               onOpenPrint();
             }}
             title="Visualizar Proposta PDF"
-            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 text-xs transition-colors"
+            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
           >
             <Printer className="w-4 h-4" />
           </button>
