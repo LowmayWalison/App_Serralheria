@@ -9,7 +9,10 @@ import {
   Calculator,
   Sun,
   Moon,
-  Cloud
+  Cloud,
+  FileText,
+  Download,
+  Code
 } from 'lucide-react';
 import { User } from 'firebase/auth';
 
@@ -40,6 +43,7 @@ export function Header({
   onOpenHistory,
   onSaveQuote,
   onOpenBarCalc,
+  onOpenPrint,
   onOpenWorkspace,
   currentUser,
   theme = 'light',
@@ -170,6 +174,21 @@ export function Header({
             )}
           </button>
 
+          {onOpenPrint && (
+            <button
+              id="btn-header-pdf"
+              onClick={() => {
+                hapticAudio.playTap();
+                onOpenPrint();
+              }}
+              className="flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 active:scale-95 text-white rounded-xl shadow-md shadow-red-950/30 border border-red-500/40 transition cursor-pointer"
+              title="Gerar e Baixar Proposta Comercial em PDF"
+            >
+              <FileText className="w-3.5 h-3.5 text-white" />
+              <span>Gerar PDF</span>
+            </button>
+          )}
+
           {/* Theme Toggle Button (Light / Dark) */}
           {onToggleTheme && (
             <button
@@ -214,6 +233,18 @@ export function Header({
               )}
             </button>
           )}
+
+          {/* Download Full Source Code (.zip) */}
+          <a
+            id="btn-header-download-source"
+            href="/serralheria-pro-codigo-fonte.zip"
+            download="serralheria-pro-codigo-fonte.zip"
+            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-emerald-950/70 hover:bg-emerald-900 active:bg-emerald-800 text-emerald-200 hover:text-emerald-100 rounded-xl border border-emerald-700/60 transition cursor-pointer"
+            title="Baixar pacote completo do código-fonte (.zip)"
+          >
+            <Download className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Baixar Código (.zip)</span>
+          </a>
         </div>
       </div>
     </header>

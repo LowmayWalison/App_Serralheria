@@ -1,20 +1,6 @@
-const CACHE_NAME = 'serralheria-app-v1';
-
-const STATIC_ASSETS = [
-  '/',
-  '/index.html',
-  '/manifest.json',
-  '/icon.svg'
-];
+const CACHE_NAME = 'serralheria-app-v2';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS).catch((err) => {
-        console.warn('PWA: Failed to cache some static assets', err);
-      });
-    })
-  );
   self.skipWaiting();
 });
 
@@ -22,9 +8,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
-        cacheNames
-          .filter((name) => name !== CACHE_NAME)
-          .map((name) => caches.delete(name))
+        cacheNames.map((name) => caches.delete(name))
       );
     })
   );
@@ -32,42 +16,53 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-  // Navigation or static asset cache strategy: Stale-While-Revalidate / Network first with offline fallback
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Fetch in background to update cache
-        fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, networkResponse);
-              });
-            }
-          })
-          .catch(() => {});
-        return cachedResponse;
-      }
+  const url = new URL(event.request.url);
 
-      return fetch(event.request)
-        .then((response) => {
-          if (!response || response.status !== 200 || response.type !== 'basic') {
-            return response;
-          }
+  // NEVER intercept dev server, Vite internal paths, HMR, src files, node_modules, API, or local hosts
+  if (
+    url.pathname.startsWith('/@') ||
+    url.pathname.startsWith('/src/') ||
+    url.pathname.includes('node_modules') ||
+    url.pathname.startsWith('/api/') ||
+    url.searchParams.has('v') ||
+    url.searchParams.has('t') ||
+    url.hostname === 'localhost' ||
+    url.hostname === '127.0.0.1' ||
+    url.hostname.includes('.run.app')
+  ) {
+    return;
+  }
+
+  // Network-first for static assets
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
+          return response;
+        }
+        if (
+          url.pathname.startsWith('/assets/') ||
+          url.pathname.endsWith('.svg') ||
+          url.pathname.endsWith('.png') ||
+          url.pathname.endsWith('.ico') ||
+          url.pathname === '/manifest.json'
+        ) {
           const responseToCache = response.clone();
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
-          return response;
-        })
-        .catch(() => {
-          // If offline and requesting document, return cached index.html
+        }
+        return response;
+      })
+      .catch(() => {
+        return caches.match(event.request).then((cached) => {
+          if (cached) return cached;
           if (event.request.headers.get('accept')?.includes('text/html')) {
             return caches.match('/');
           }
         });
-    })
+      })
   );
 });

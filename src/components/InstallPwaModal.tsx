@@ -444,10 +444,10 @@ export function InstallPwaModal({
                     <strong>Aplicativo:</strong> LW Serralheria Pro (<code>com.lwserralheria.app</code>)
                   </p>
                   <p>
-                    <strong>Tratamento de Dados:</strong> O aplicativo armazena os orçamentos e listas de materiais localmente no dispositivo (Offline-First) e opcionalmente sincroniza com Firestore e Google Workspace mediante consentimento do usuário.
+                    <strong>Tratamento de Dados:</strong> O aplicativo armazena os orçamentos e listas de materiais localmente no dispositivo (Offline-First) de forma segura e privada, sem compartilhamento externo.
                   </p>
                   <p>
-                    <strong>Google Workspace & Auth:</strong> As permissões para Google Sheets, Drive, Docs e Gmail são utilizadas estritamente para exportação e backup de orçamentos solicitados pelo usuário, sem comercialização de dados.
+                    <strong>Privacidade e Segurança:</strong> Seus dados de orçamentos, clientes e valores pertencem exclusivamente à sua oficina e não são comercializados ou compartilhados com terceiros.
                   </p>
                   <p>
                     <strong>Compatibilidade:</strong> 100% conforme as diretrizes do Google Play Developer Distribution Agreement.

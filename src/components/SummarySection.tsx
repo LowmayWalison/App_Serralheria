@@ -15,8 +15,6 @@ import {
   ShieldCheck,
   Award,
   MessageCircle,
-  Cloud,
-  FileSpreadsheet,
   FileText
 } from 'lucide-react';
 
@@ -375,31 +373,12 @@ export function SummarySection({
           <button
             id="btn-print-pdf"
             onClick={onOpenPrint}
-            className="flex items-center justify-center gap-2 py-3 px-4 bg-zinc-800 hover:bg-zinc-700 active:bg-zinc-900 text-white rounded-xl font-bold text-sm shadow-md shadow-zinc-900/20 transition cursor-pointer border border-zinc-700"
+            className="flex items-center justify-center gap-2 py-3 px-4 bg-gradient-to-r from-red-600 via-red-600 to-red-700 hover:from-red-500 hover:to-red-600 active:scale-95 text-white rounded-xl font-bold text-sm shadow-lg shadow-red-950/20 transition cursor-pointer border border-red-500/30"
           >
-            <Printer className="w-4 h-4 text-red-400" />
-            <span>Proposta Formal / PDF</span>
+            <FileText className="w-4 h-4 text-white" />
+            <span>Gerar / Baixar PDF</span>
           </button>
         </div>
-
-        {/* Google Workspace & Cloud Sync Quick Bar */}
-        {onOpenWorkspace && (
-          <div className="mt-3 pt-3 border-t border-zinc-200 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-            <div className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400">
-              <Cloud className="w-4 h-4 text-blue-500" />
-              <span>Sincronizar com Google Sheets, Docs, Drive, Gmail & Firestore</span>
-            </div>
-            <button
-              id="btn-summary-open-workspace"
-              type="button"
-              onClick={onOpenWorkspace}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-red-600 to-zinc-900 hover:from-red-500 hover:to-zinc-800 text-white rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer shadow-sm"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              <span>Exportar / Sincronizar Google</span>
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );

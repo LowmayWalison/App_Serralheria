@@ -56,6 +56,17 @@ export function MobileBottomNav({
           <button
             onClick={() => {
               hapticAudio.playTap();
+              onOpenPrint();
+            }}
+            title="Baixar PDF"
+            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 active:bg-red-600 text-zinc-300 active:text-white rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
+          >
+            <Printer className="w-4 h-4 text-zinc-400" />
+          </button>
+
+          <button
+            onClick={() => {
+              hapticAudio.playTap();
               onSaveQuote();
             }}
             title="Salvar Orçamento"
@@ -82,17 +93,6 @@ export function MobileBottomNav({
               )}
             </button>
           )}
-
-          <button
-            onClick={() => {
-              hapticAudio.playTap();
-              onOpenPrint();
-            }}
-            title="Visualizar Proposta PDF"
-            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
-          >
-            <Printer className="w-4 h-4" />
-          </button>
 
           <button
             onClick={() => {

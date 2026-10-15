@@ -1,11 +1,11 @@
 import { initializeApp, getApps, getApp } from 'firebase/app';
 import { 
   getAuth, 
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  onAuthStateChanged, 
-  User, 
-  signOut 
+  signOut,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  User 
 } from 'firebase/auth';
 import { 
   getFirestore, 
@@ -73,68 +73,50 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   throw new Error(JSON.stringify(errInfo));
 }
 
-// Google Auth Provider setup with Google Workspace scopes
-export const googleProvider = new GoogleAuthProvider();
-googleProvider.addScope('https://www.googleapis.com/auth/drive.file');
-googleProvider.addScope('https://www.googleapis.com/auth/spreadsheets');
-googleProvider.addScope('https://www.googleapis.com/auth/documents');
-googleProvider.addScope('https://www.googleapis.com/auth/presentations');
-googleProvider.addScope('https://www.googleapis.com/auth/gmail.send');
-googleProvider.addScope('https://www.googleapis.com/auth/gmail.readonly');
-googleProvider.addScope('https://www.googleapis.com/auth/calendar.events');
-googleProvider.addScope('https://www.googleapis.com/auth/tasks');
-googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
-googleProvider.addScope('https://www.googleapis.com/auth/classroom.courses.readonly');
-
-// In-memory access token cache
 let cachedAccessToken: string | null = null;
-let isSigningIn = false;
 
 export const initAuth = (
   onAuthSuccess?: (user: User, token: string | null) => void,
-  onAuthFailure?: () => void
+  onSignedOut?: () => void
 ) => {
   return onAuthStateChanged(auth, async (user: User | null) => {
     if (user) {
       if (onAuthSuccess) onAuthSuccess(user, cachedAccessToken);
     } else {
       cachedAccessToken = null;
-      if (onAuthFailure) onAuthFailure();
+      if (onSignedOut) onSignedOut();
     }
   });
 };
 
 export const googleSignIn = async (): Promise<{ user: User; accessToken: string } | null> => {
   try {
-    isSigningIn = true;
-    const result = await signInWithPopup(auth, googleProvider);
+    const provider = new GoogleAuthProvider();
+    provider.addScope('https://www.googleapis.com/auth/spreadsheets');
+    provider.addScope('https://www.googleapis.com/auth/documents');
+    provider.addScope('https://www.googleapis.com/auth/drive.file');
+    provider.addScope('https://www.googleapis.com/auth/gmail.send');
+    provider.addScope('https://www.googleapis.com/auth/calendar.events');
+    provider.addScope('https://www.googleapis.com/auth/tasks');
+    provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+
+    const result = await signInWithPopup(auth, provider);
     const credential = GoogleAuthProvider.credentialFromResult(result);
-    if (!credential?.accessToken) {
-      // If token not in credential directly, keep user session
-      cachedAccessToken = null;
-    } else {
+    if (credential?.accessToken) {
       cachedAccessToken = credential.accessToken;
     }
     return { user: result.user, accessToken: cachedAccessToken || '' };
-  } catch (error) {
-    console.error('Sign in error:', error);
-    throw error;
-  } finally {
-    isSigningIn = false;
+  } catch (err) {
+    console.error('Google Sign-in error:', err);
+    throw err;
   }
 };
 
-export const getAccessToken = async (): Promise<string | null> => {
-  return cachedAccessToken;
-};
-
-export const setAccessToken = (token: string | null) => {
-  cachedAccessToken = token;
-};
+export const getAccessToken = () => cachedAccessToken;
 
 export const logout = async () => {
-  await signOut(auth);
   cachedAccessToken = null;
+  await signOut(auth);
 };
 
 // Test Firestore Connection
