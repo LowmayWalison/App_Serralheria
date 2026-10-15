@@ -3,10 +3,8 @@ import {
   FileSpreadsheet, 
   BadgeDollarSign, 
   Layers, 
-  Send, 
-  Printer, 
+  FileText, 
   BookmarkCheck,
-  MessageCircle,
   Sun,
   Moon
 } from 'lucide-react';
@@ -19,7 +17,7 @@ interface MobileBottomNavProps {
   onSelectTab: (tab: MobileTab) => void;
   totalPrice: number;
   onOpenPrint: () => void;
-  onShareWhatsApp: () => void;
+  onShareWhatsApp?: () => void;
   onSaveQuote: () => void;
   theme?: 'light' | 'dark';
   onToggleTheme?: () => void;
@@ -30,7 +28,6 @@ export function MobileBottomNav({
   onSelectTab,
   totalPrice,
   onOpenPrint,
-  onShareWhatsApp,
   onSaveQuote,
   theme = 'dark',
   onToggleTheme,
@@ -58,10 +55,11 @@ export function MobileBottomNav({
               hapticAudio.playTap();
               onOpenPrint();
             }}
-            title="Baixar PDF"
-            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 active:bg-red-600 text-zinc-300 active:text-white rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
+            title="Gerar Proposta em PDF"
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-red-600 to-red-700 hover:from-red-500 hover:to-red-600 active:scale-95 text-white rounded-lg font-bold text-xs shadow-md shadow-red-950/40 border border-red-500/40 transition-all cursor-pointer"
           >
-            <Printer className="w-4 h-4 text-zinc-400" />
+            <FileText className="w-3.5 h-3.5 text-white" />
+            <span>Gerar PDF</span>
           </button>
 
           <button
@@ -70,7 +68,7 @@ export function MobileBottomNav({
               onSaveQuote();
             }}
             title="Salvar Orçamento"
-            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 active:bg-red-600 text-zinc-300 active:text-white rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
+            className="p-1.5 bg-zinc-800 hover:bg-zinc-700 active:bg-zinc-600 text-zinc-300 active:text-white rounded-lg border border-zinc-700 text-xs transition-colors cursor-pointer"
           >
             <BookmarkCheck className="w-4 h-4 text-red-400" />
           </button>
@@ -93,17 +91,6 @@ export function MobileBottomNav({
               )}
             </button>
           )}
-
-          <button
-            onClick={() => {
-              hapticAudio.playSuccess();
-              onShareWhatsApp();
-            }}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 active:scale-95 text-white rounded-lg font-bold text-xs shadow-md shadow-emerald-950/40 border border-emerald-500/40 transition-all cursor-pointer"
-          >
-            <MessageCircle className="w-3.5 h-3.5 fill-white/20 stroke-white" />
-            <span>WhatsApp</span>
-          </button>
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { QuoteData, WorkshopProfile, ItemRow } from './types';
-import { calculateQuoteTotals, generateWhatsAppMessage, formatBRL } from './utils/formatters';
+import { calculateQuoteTotals, formatBRL } from './utils/formatters';
 import { createEmptyQuote, TemplateDefinition, PRESET_TEMPLATES } from './data/defaultTemplates';
 import { Header } from './components/Header';
 import { ProjectInfoCard } from './components/ProjectInfoCard';
@@ -353,21 +353,6 @@ export default function App() {
     showToast('Orçamento excluído do histórico.');
   };
 
-  const handleShareWhatsApp = () => {
-    hapticAudio.playSuccess();
-    const totals = calculateQuoteTotals(quote);
-    const text = generateWhatsAppMessage(quote, totals, profile);
-    const encoded = encodeURIComponent(text);
-    const cleanPhone = (quote.clientPhone || '').replace(/\D/g, '');
-    
-    if (cleanPhone.length >= 10) {
-      const waNumber = cleanPhone.startsWith('55') ? cleanPhone : '55' + cleanPhone;
-      window.open(`https://api.whatsapp.com/send?phone=${waNumber}&text=${encoded}`, '_blank');
-    } else {
-      window.open(`https://api.whatsapp.com/send?text=${encoded}`, '_blank');
-    }
-  };
-
   // Totals
   const totals = calculateQuoteTotals(quote);
   const totalMetalMeters = (quote.metalItems || []).reduce((acc, item) => acc + (item.quantity || 0), 0);
@@ -442,7 +427,6 @@ export default function App() {
           onSaveQuote={handleSaveToHistory}
           onOpenBarCalc={() => setIsBarCalcOpen(true)}
           onOpenPrint={() => setIsPrintOpen(true)}
-          onShareWhatsApp={handleShareWhatsApp}
           onOpenInstall={() => setIsInstallOpen(true)}
           onOpenWorkspace={() => setIsWorkspaceOpen(true)}
           currentUser={currentUser}
@@ -629,7 +613,7 @@ export default function App() {
                 }}
                 className="w-full py-4 bg-gradient-to-r from-red-600 via-red-700 to-red-800 hover:from-red-500 hover:to-red-700 text-white font-black rounded-2xl text-sm sm:text-base flex items-center justify-center gap-2 shadow-lg shadow-red-950/50 active:scale-[0.99] transition-all cursor-pointer"
               >
-                <span>Avançar para Preço de Venda & WhatsApp ({formatBRL(totals.finalPrice)})</span>
+                <span>Avançar para Preço de Venda & Proposta ({formatBRL(totals.finalPrice)})</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
             </div>
@@ -647,7 +631,6 @@ export default function App() {
               onDiscountChange={(cashDiscountPercent) => handleUpdateQuote({ cashDiscountPercent })}
               onCardFeeChange={(cardFeePercent) => handleUpdateQuote({ cardFeePercent })}
               onOpenPrint={() => setIsPrintOpen(true)}
-              onShareWhatsApp={handleShareWhatsApp}
               onOpenWorkspace={() => setIsWorkspaceOpen(true)}
             />
           </div>
@@ -776,7 +759,6 @@ export default function App() {
           onSelectTab={setActiveMobileTab}
           totalPrice={totals.finalPrice}
           onOpenPrint={() => setIsPrintOpen(true)}
-          onShareWhatsApp={handleShareWhatsApp}
           onSaveQuote={handleSaveToHistory}
           theme={theme}
           onToggleTheme={toggleTheme}
@@ -825,7 +807,6 @@ export default function App() {
         quote={quote}
         totals={totals}
         profile={profile}
-        onShareWhatsApp={handleShareWhatsApp}
       />
 
       <InstallPwaModal

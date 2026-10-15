@@ -4,17 +4,14 @@ import { formatBRL, parseNumber, generateWhatsAppMessage } from '../utils/format
 import { 
   Percent, 
   DollarSign, 
-  Send, 
   Copy, 
   Check, 
-  Printer, 
   TrendingUp, 
   CreditCard, 
   QrCode, 
   Sliders,
   ShieldCheck,
   Award,
-  MessageCircle,
   FileText
 } from 'lucide-react';
 
@@ -26,7 +23,7 @@ interface SummarySectionProps {
   onDiscountChange: (discount: number) => void;
   onCardFeeChange: (fee: number) => void;
   onOpenPrint: () => void;
-  onShareWhatsApp: () => void;
+  onShareWhatsApp?: () => void;
   onOpenWorkspace?: () => void;
 }
 
@@ -47,7 +44,7 @@ export function SummarySection({
   const [selectedInstallments, setSelectedInstallments] = useState(3);
   const [copied, setCopied] = useState(false);
 
-  const handleCopyWhatsApp = () => {
+  const handleCopyProposalText = () => {
     const text = generateWhatsAppMessage(quote, totals, profile);
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -348,25 +345,15 @@ export function SummarySection({
 
       {/* 3. Action Buttons Card */}
       <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/90 dark:border-zinc-800 p-4 md:p-5 shadow-sm transition-colors">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {/* Send on WhatsApp */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Copy formatted proposal text */}
           <button
-            id="btn-send-whatsapp"
-            onClick={onShareWhatsApp}
-            className="flex items-center justify-center gap-2 py-3 px-4 bg-emerald-600 hover:bg-emerald-500 active:bg-emerald-700 text-white rounded-xl font-bold text-sm shadow-lg shadow-emerald-900/20 border border-emerald-500/30 transition cursor-pointer active:scale-95"
-          >
-            <MessageCircle className="w-4 h-4 fill-white/20 stroke-white" />
-            <span>Enviar no WhatsApp</span>
-          </button>
-
-          {/* Copy formatted text */}
-          <button
-            id="btn-copy-whatsapp"
-            onClick={handleCopyWhatsApp}
+            id="btn-copy-proposal-text"
+            onClick={handleCopyProposalText}
             className="flex items-center justify-center gap-2 py-3 px-4 bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 text-white rounded-xl font-bold text-sm shadow-md shadow-zinc-900/20 transition cursor-pointer border border-zinc-700"
           >
             {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-emerald-400" />}
-            <span>{copied ? 'Mensagem Copiada!' : 'Copiar Texto Proposta'}</span>
+            <span>{copied ? 'Mensagem Copiada!' : 'Copiar Texto da Proposta'}</span>
           </button>
 
           {/* Print / Formal PDF */}

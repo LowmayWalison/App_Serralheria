@@ -4,7 +4,6 @@ import { formatBRL } from '../utils/formatters';
 import { 
   X, 
   Download, 
-  Printer, 
   FileText, 
   ShieldCheck, 
   CheckCircle2, 
@@ -18,8 +17,7 @@ import {
   Calendar,
   Layers,
   MapPin,
-  Check,
-  MessageCircle
+  Check
 } from 'lucide-react';
 import { generatePdfFromElement } from '../utils/pdfGenerator';
 import { hapticAudio } from '../utils/audioFeedback';
@@ -30,7 +28,6 @@ interface PrintProposalModalProps {
   quote: QuoteData;
   totals: CalculatedTotals;
   profile: WorkshopProfile;
-  onShareWhatsApp?: () => void;
 }
 
 export function PrintProposalModal({
@@ -39,7 +36,6 @@ export function PrintProposalModal({
   quote,
   totals,
   profile,
-  onShareWhatsApp,
 }: PrintProposalModalProps) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showConfigPanel, setShowConfigPanel] = useState(false);
@@ -55,11 +51,6 @@ export function PrintProposalModal({
   const [showLocation, setShowLocation] = useState(true);
 
   if (!isOpen) return null;
-
-  const handlePrint = () => {
-    hapticAudio.playTap();
-    window.print();
-  };
 
   const quoteNumber = (quote.id || '').replace('quote_', '').slice(-6) || '000001';
   const emissionDate = quote.date 
@@ -85,7 +76,7 @@ export function PrintProposalModal({
       hapticAudio.playSuccess();
     } catch (error) {
       console.error('Falha ao gerar PDF:', error);
-      alert('Erro ao gerar o PDF. Você também pode utilizar a opção "Imprimir" do navegador.');
+      alert('Erro ao gerar o PDF. Por favor, tente novamente.');
     } finally {
       setIsGenerating(false);
     }
@@ -141,26 +132,6 @@ export function PrintProposalModal({
           </div>
 
           <div className="flex items-center gap-2">
-            {onShareWhatsApp && (
-              <button
-                onClick={onShareWhatsApp}
-                className="hidden md:flex items-center gap-1.5 px-3 py-2 bg-emerald-700 hover:bg-emerald-600 active:bg-emerald-800 text-white rounded-xl text-xs font-bold transition shadow-xs cursor-pointer"
-                title="Compartilhar resumo via WhatsApp"
-              >
-                <MessageCircle className="w-4 h-4 fill-white/20 stroke-white" />
-                <span>WhatsApp</span>
-              </button>
-            )}
-
-            <button
-              onClick={handlePrint}
-              className="flex items-center gap-1.5 px-3.5 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-xs font-medium transition border border-zinc-700 cursor-pointer"
-              title="Imprimir direto pelo navegador"
-            >
-              <Printer className="w-4 h-4 text-zinc-300" />
-              <span className="hidden sm:inline">Imprimir</span>
-            </button>
-
             <button
               onClick={handleDownload}
               disabled={isGenerating}
@@ -733,12 +704,6 @@ export function PrintProposalModal({
           </div>
 
           <div className="flex items-center gap-2 ml-auto">
-            <button
-              onClick={handlePrint}
-              className="px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-xs font-bold transition cursor-pointer"
-            >
-              Imprimir
-            </button>
             <button
               onClick={handleDownload}
               disabled={isGenerating}

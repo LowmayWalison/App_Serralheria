@@ -10,9 +10,7 @@ import {
   Sun,
   Moon,
   Cloud,
-  FileText,
-  Download,
-  Code
+  FileText
 } from 'lucide-react';
 import { User } from 'firebase/auth';
 
@@ -25,7 +23,6 @@ interface HeaderProps {
   onSaveQuote: () => void;
   onOpenBarCalc: () => void;
   onOpenPrint: () => void;
-  onShareWhatsApp: () => void;
   onOpenInstall?: () => void;
   onOpenWorkspace?: () => void;
   currentUser?: User | null;
@@ -233,18 +230,6 @@ export function Header({
               )}
             </button>
           )}
-
-          {/* Download Full Source Code (.zip) */}
-          <a
-            id="btn-header-download-source"
-            href="/serralheria-pro-codigo-fonte.zip"
-            download="serralheria-pro-codigo-fonte.zip"
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-emerald-950/70 hover:bg-emerald-900 active:bg-emerald-800 text-emerald-200 hover:text-emerald-100 rounded-xl border border-emerald-700/60 transition cursor-pointer"
-            title="Baixar pacote completo do código-fonte (.zip)"
-          >
-            <Download className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Baixar Código (.zip)</span>
-          </a>
         </div>
       </div>
     </header>
