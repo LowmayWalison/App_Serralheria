@@ -2,7 +2,6 @@ import { hapticAudio } from '../utils/audioFeedback';
 import { 
   FileSpreadsheet, 
   BadgeDollarSign, 
-  Layers, 
   FileText, 
   BookmarkCheck,
   Sun,
@@ -128,8 +127,8 @@ export function MobileBottomNav({
               : 'text-zinc-400 hover:text-zinc-200'
           }`}
         >
-          <Layers className={`w-5 h-5 mb-0.5 ${activeTab === 'history' ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
-          <span className="text-[10px] tracking-tight font-bold">3. Modelos</span>
+          <BookmarkCheck className={`w-5 h-5 mb-0.5 ${activeTab === 'history' ? 'stroke-[2.5]' : 'stroke-[1.5]'}`} />
+          <span className="text-[10px] tracking-tight font-bold">3. Salvos</span>
         </button>
       </nav>
     </div>

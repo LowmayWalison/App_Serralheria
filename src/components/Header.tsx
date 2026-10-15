@@ -5,7 +5,6 @@ import {
   FolderOpen, 
   BookmarkCheck, 
   Settings, 
-  Layers, 
   Calculator,
   Sun,
   Moon,
@@ -18,7 +17,6 @@ interface HeaderProps {
   workshopProfile: WorkshopProfile;
   onOpenProfile: () => void;
   onNewQuote: () => void;
-  onOpenTemplates: () => void;
   onOpenHistory: () => void;
   onSaveQuote: () => void;
   onOpenBarCalc: () => void;
@@ -36,7 +34,6 @@ export function Header({
   workshopProfile,
   onOpenProfile,
   onNewQuote,
-  onOpenTemplates,
   onOpenHistory,
   onSaveQuote,
   onOpenBarCalc,
@@ -111,19 +108,6 @@ export function Header({
           >
             <Plus className="w-3.5 h-3.5 text-red-400" />
             <span>Novo</span>
-          </button>
-
-          <button
-            id="btn-header-templates"
-            onClick={() => {
-              hapticAudio.playTap();
-              onOpenTemplates();
-            }}
-            className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold bg-zinc-800/90 hover:bg-zinc-700 active:bg-zinc-600 text-zinc-200 hover:text-white rounded-xl border border-zinc-700 hover:border-red-500/40 transition cursor-pointer"
-            title="Carregar modelos prontos (Portão, Grade, Corrimão, etc.)"
-          >
-            <Layers className="w-3.5 h-3.5 text-red-400" />
-            <span>Modelos</span>
           </button>
 
           <button

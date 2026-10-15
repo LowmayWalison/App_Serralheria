@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { QuoteData, WorkshopProfile, ItemRow } from './types';
 import { calculateQuoteTotals, formatBRL } from './utils/formatters';
-import { createEmptyQuote, TemplateDefinition, PRESET_TEMPLATES } from './data/defaultTemplates';
+import { createEmptyQuote } from './data/defaultTemplates';
 import { Header } from './components/Header';
 import { ProjectInfoCard } from './components/ProjectInfoCard';
 import { ItemsSection } from './components/ItemsSection';
@@ -9,7 +9,6 @@ import { EnergySection } from './components/EnergySection';
 import { ExtraCostsSection } from './components/ExtraCostsSection';
 import { SummarySection } from './components/SummarySection';
 import { BarCalculatorModal } from './components/BarCalculatorModal';
-import { TemplatesModal } from './components/TemplatesModal';
 import { HistoryModal } from './components/HistoryModal';
 import { WorkshopProfileModal } from './components/WorkshopProfileModal';
 import { PrintProposalModal } from './components/PrintProposalModal';
@@ -22,7 +21,6 @@ import { initAuth, testFirestoreConnection } from './services/firebase';
 import { User } from 'firebase/auth';
 import { 
   BookmarkCheck, 
-  Layers, 
   CheckCircle2,
   FileSpreadsheet,
   BadgeDollarSign,
@@ -148,7 +146,6 @@ export default function App() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Modals state
-  const [isTemplatesOpen, setIsTemplatesOpen] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [isBarCalcOpen, setIsBarCalcOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -307,22 +304,6 @@ export default function App() {
     showToast('Novo orçamento criado.');
   };
 
-  const handleSelectTemplate = (template: TemplateDefinition) => {
-    hapticAudio.playSuccess();
-    const fresh = createEmptyQuote();
-    const merged: QuoteData = {
-      ...fresh,
-      ...template.quote,
-      id: 'quote_' + Date.now(),
-      projectClient: template.quote.projectClient || template.name,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    setQuote(merged);
-    setActiveMobileTab('quote');
-    showToast(`Modelo "${template.name}" carregado!`);
-  };
-
   const handleLoadQuote = (loaded: QuoteData) => {
     hapticAudio.playSuccess();
     setQuote(loaded);
@@ -422,7 +403,6 @@ export default function App() {
           workshopProfile={profile}
           onOpenProfile={() => setIsProfileOpen(true)}
           onNewQuote={handleNewQuote}
-          onOpenTemplates={() => setIsTemplatesOpen(true)}
           onOpenHistory={() => setIsHistoryOpen(true)}
           onSaveQuote={handleSaveToHistory}
           onOpenBarCalc={() => setIsBarCalcOpen(true)}
@@ -479,8 +459,8 @@ export default function App() {
                 : 'text-zinc-700 dark:text-zinc-400 hover:bg-white/60 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-200'
             }`}
           >
-            <Layers className={`w-4 h-4 ${activeMobileTab === 'history' ? 'text-red-400' : 'text-zinc-500 dark:text-zinc-400'}`} />
-            <span>3. Modelos & Salvos</span>
+            <BookmarkCheck className={`w-4 h-4 ${activeMobileTab === 'history' ? 'text-red-400' : 'text-zinc-500 dark:text-zinc-400'}`} />
+            <span>3. Salvos ({savedQuotes.length})</span>
           </button>
         </div>
 
@@ -636,48 +616,10 @@ export default function App() {
           </div>
         )}
 
-        {/* TAB 3: MODELOS PRONTOS & HISTÓRICO LOCAL */}
+        {/* TAB 3: HISTÓRICO DE ORÇAMENTOS SALVOS */}
         {activeMobileTab === 'history' && (
           <div className="space-y-6 animate-in fade-in duration-200">
-            {/* 1. Quick Preset Templates */}
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/90 dark:border-zinc-800 p-4 md:p-6 shadow-sm space-y-3 transition-colors">
-              <div className="flex items-center gap-2.5 pb-2 border-b border-zinc-100 dark:border-zinc-800">
-                <Layers className="w-5 h-5 text-red-600 dark:text-red-400" />
-                <div>
-                  <h3 className="font-bold text-zinc-900 dark:text-zinc-100 text-base">Modelos de Projetos Prontos</h3>
-                  <p className="text-xs text-zinc-500 dark:text-zinc-400">Inicie um orçamento com 1 toque com materiais pré-carregados</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {PRESET_TEMPLATES.map((tmpl) => (
-                  <div
-                    key={tmpl.id}
-                    onClick={() => handleSelectTemplate(tmpl)}
-                    className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-red-500 dark:hover:border-red-500 bg-zinc-50/70 dark:bg-zinc-800/60 hover:bg-red-50/30 dark:hover:bg-red-950/30 transition-all cursor-pointer group flex flex-col justify-between gap-2.5 shadow-sm"
-                  >
-                    <div>
-                      <span className="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 bg-red-100 dark:bg-red-950/80 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-900/50 rounded-md inline-block mb-1.5">
-                        {tmpl.category}
-                      </span>
-                      <h4 className="font-bold text-zinc-900 dark:text-zinc-100 text-sm group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">
-                        {tmpl.name}
-                      </h4>
-                      <p className="text-xs text-zinc-600 dark:text-zinc-400 mt-1 line-clamp-2">
-                        {tmpl.description}
-                      </p>
-                    </div>
-
-                    <button className="flex items-center justify-center gap-1.5 w-full py-2 bg-white dark:bg-zinc-900 group-hover:bg-red-600 dark:group-hover:bg-red-600 group-hover:text-white text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-700 group-hover:border-red-600 rounded-xl text-xs font-bold transition shadow-sm cursor-pointer">
-                      <span>Carregar Este Modelo</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* 2. Saved Quotes History */}
+            {/* Saved Quotes History */}
             <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200/90 dark:border-zinc-800 p-4 md:p-6 shadow-sm space-y-3 transition-colors">
               <div className="flex items-center justify-between pb-2 border-b border-zinc-100 dark:border-zinc-800">
                 <div className="flex items-center gap-2.5">
@@ -770,12 +712,6 @@ export default function App() {
         isOpen={isBarCalcOpen}
         onClose={() => setIsBarCalcOpen(false)}
         metalTotalMeters={totalMetalMeters}
-      />
-
-      <TemplatesModal
-        isOpen={isTemplatesOpen}
-        onClose={() => setIsTemplatesOpen(false)}
-        onSelectTemplate={handleSelectTemplate}
       />
 
       <HistoryModal
